@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Bypasser | Ultimate v5.1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e1a, #1a1f35, #0d1225);
+            font-family: 'Segoe UI', 'Courier New', monospace;
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+            transition: 0.5s;
+        }
+
+        body.easter-egg {
+            background: radial-gradient(circle at center, #1a0000, #0a0000, #000000) !important;
+            animation: glitchBg 0.5s infinite;
+        }
+
+        @keyframes glitchBg {
+            0%, 100% { filter: hue-rotate(0deg); }
+            25% { filter: hue-rotate(90deg) brightness(1.2); }
+            50% { filter: hue-rotate(180deg) brightness(0.8); }
+            75% { filter: hue-rotate(270deg) brightness(1.1); }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: rgba(20, 28, 58, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 35px;
+            border: 1px solid rgba(0, 255, 200, 0.25);
+            box-shadow: 0 0 60px rgba(0, 255, 200, 0.08);
+            transition: all 0.5s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container.easter-egg {
+            border-color: #ff0000 !important;
+            box-shadow: 0 0 100px rgba(255, 0, 0, 0.6), 0 0 200px rgba(255, 0, 0, 0.3) !important;
+            animation: borderPulse 0.3s infinite;
+        }
+
+        @keyframes borderPulse {
+            0%, 100% { border-color: #ff0000; }
+            50% { border-color: #ff6600; }
+        }
+
+        /* Секретное сообщение */
+        .secret-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(30px);
+            padding: 50px 70px;
+            border-radius: 30px;
+            border: 3px solid #ff0000;
+            box-shadow: 0 0 100px rgba(255, 0, 0, 0.8), 0 0 200px rgba(255, 0, 0, 0.4);
+            text-align: center;
+            animation: secretAppear 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            max-width: 90vw;
+        }
+
+        .secret-message.show {
+            display: block;
+        }
+
+        @keyframes secretAppear {
+            0% { transform: translate(-50%, -50%) scale(0.1) rotate(720deg); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .secret-message h2 {
+            font-size: 3.5rem;
+            color: #ff0000;
+            text-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000, 0 0 100px #ff0000;
+            animation: glitchText 0.15s infinite;
+            margin-bottom: 10px;
+            letter-spacing: 4px;
+        }
+
+        @keyframes glitchText {
+            0%, 100% { text-shadow: -2px 0 #ff0000, 2px 0 #00ff00; }
+            25% { text-shadow: -4px 0 #ff6600, 4px 0 #0066ff; transform: skewX(2deg); }
+            50% { text-shadow: -1px 0 #ff00ff, 1px 0 #00ffff; transform: skewX(-2deg); }
+            75% { text-shadow: -3px 0 #ffff00, 3px 0 #ff00ff; transform: skewX(1deg); }
+        }
+
+        .secret-message p {
+            font-size: 1.2rem;
+            color: #ff4444;
+            margin: 15px 0;
+            opacity: 0.9;
+        }
+
+        .secret-message .sub-secret {
+            font-size: 0.8rem;
+            color: #ff8888;
+            opacity: 0.6;
+            letter-spacing: 2px;
+            border-top: 1px solid rgba(255,0,0,0.2);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .secret-close {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .secret-close:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
+        }
+
+        /* Остальные стили (сокращены) */
+        .subtitle {
+            text-align: center;
+            color: #8899bb;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 12px;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 10px 18px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.4);
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            transition: 0.2s;
+        }
+        .search-box input:focus {
+            border-color: #00ffc8;
+        }
+        .category-section {
+            margin-bottom: 12px;
+        }
+        .category-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #445577;
+            margin: 12px 0 6px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            padding-bottom: 4px;
+        }
+        .method-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .method-btn {
+            padding: 5px 14px;
+            border-radius: 30px;
+            border: 1px solid rgba(0, 255, 200, 0.15);
+            background: transparent;
+            color: #8899bb;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .method-btn:hover {
+            background: rgba(0, 255, 200, 0.08);
+            border-color: #00ffc8;
+            color: #fff;
+        }
+        .method-btn.active {
+            background: linear-gradient(135deg, #00ffc8, #aa66ff);
+            color: #0a0e1a;
+            border-color: transparent;
+            font-weight: 600;
+            box-shadow: 0 0 15px rgba(0, 255, 200, 0.2);
+        }
+        .options-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin: 12px 0 15px;
+            padding: 10px 16px;
+            background: rgba(0,0,0,0.25);
+            border-radius: 12px;
+        }
+        .options-row label {
+            font-size: 0.8rem;
+            color: #aabbdd;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .options-row input[type="checkbox"] {
+            accent-color: #00ffc8;
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
+        }
+        .key-section {
+            display: none;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .key-section label {
+            color: #aabbdd;
+            font-size: 0.85rem;
+        }
+        .key-section input {
+            flex: 1;
+            min-width: 100px;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.4);
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            outline: none;
+        }
+        .key-section input:focus {
+            border-color: #00ffc8;
+        }
+        textarea {
+            width: 100%;
+            height: 140px;
+            padding: 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(0,0,0,0.4);
+            color: #e8e8e8;
+            font-family: 'Courier New', 'Consolas', monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+            outline: none;
+            transition: 0.2s;
+            line-height: 1.6;
+        }
+        textarea:focus {
+            border-color: rgba(0, 255, 200, 0.3);
+        }
+        textarea::placeholder {
+            color: #445577;
+        }
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0 12px;
+        }
+        .action-btn {
+            padding: 10px 20px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            background: linear-gradient(135deg, #00ffc8, #00b894);
+            color: #0a0e1a;
+            box-shadow: 0 4px 20px rgba(0, 255, 200, 0.15);
+            flex: 1;
+            min-width: 80px;
+        }
+        .action-btn:hover {
+            transform: scale(1.02);
+        }
+        .action-btn.secondary {
+            background: rgba(255,255,255,0.05);
+            color: #aabbdd;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: none;
+        }
+        .action-btn.secondary:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 12px;
+            font-size: 0.75rem;
+            color: #667799;
+        }
+        .stats span {
+            font-family: 'Courier New', monospace;
+            color: #aabbdd;
+        }
+        .status-msg {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #667799;
+            min-height: 22px;
+            margin-top: 6px;
+        }
+        .status-msg.success { color: #00ffc8; }
+        .status-msg.warning { color: #ffd93d; }
+        .status-msg.easter { color: #ff0000; font-weight: 700; }
+
+        /* Particles overlay */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            display: none;
+        }
+        .particles.active {
+            display: block;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff0000;
+            border-radius: 50%;
+            animation: particleFloat 3s ease-in forwards;
+        }
+        @keyframes particleFloat {
+            0% { opacity: 1; transform: translate(0, 0) scale(1); }
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
+        }
+
+        @media (max-width: 700px) {
+            .container { padding: 15px; }
+            .secret-message { padding: 30px 20px; }
+            .secret-message h2 { font-size: 2rem; }
+            .method-btn { font-size: 0.65rem; padding: 4px 10px; }
+            .action-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Секретное сообщение -->
+<div class="secret-message" id="secretMessage">
+    <h2>⚠️ ТЫ НЕ ДОЛЖЕН БЫЛ ЭТО ВИДЕТЬ!</h2>
+    <p>🔴 Это секретная пасхалка!</p>
+    <p style="font-size: 2rem; color: #ff6600; animation: glitchText 0.2s infinite;">MaksDV</p>
+    <div class="sub-secret">🔐 Доступ разрешён только избранным | Уровень доступа: ОМНИПОТЕНТ</div>
+    <button class="secret-close" id="secretClose">🔒 Закрыть секрет</button>
+</div>
+
+<!-- Частицы -->
+<div class="particles" id="particles"></div>
+
+<div class="container" id="mainContainer">
+    <h1 style="text-align:center; font-size:2.2rem; background:linear-gradient(135deg,#00ffc8,#aa66ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:4px;">🧠 AI BYPASSER v5.1</h1>
+    <div class="subtitle">25+ методов шифрования текста + 🔥 СЕКРЕТНАЯ ПАСХАЛКА</div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="🔍 Поиск метода...">
+    </div>
+
+    <div id="methodContainer"></div>
+
+    <div class="options-row">
+        <label><input type="checkbox" id="doubleEncode"> 🔁 Двойное шифрование</label>
+        <label><input type="checkbox" id="addSpaces"> ➕ Пробелы через 4 символа</label>
+        <label><input type="checkbox" id="showInfo"> ℹ️ Показывать описание</label>
+    </div>
+
+    <div class="key-section" id="keySection">
+        <label for="methodKey">🔑 Ключ/Сдвиг:</label>
+        <input type="text" id="methodKey" value="3" placeholder="Напр. 3 для Caesar">
+        <span style="font-size:0.7rem; color:#445577;">(для Caesar, XOR)</span>
+    </div>
+
+    <textarea id="inputText" placeholder="Введите текст...">Пример текста для обхода ограничений ИИ. Это тестовое сообщение.</textarea>
+
+    <div class="action-row">
+        <button class="action-btn" id="encryptBtn">🔒 Зашифровать</button>
+        <button class="action-btn" id="decryptBtn">🔓 Расшифровать</button>
+        <button class="action-btn secondary" id="copyBtn">📋 Копировать</button>
+        <button class="action-btn secondary" id="swapBtn">🔄 Обменять</button>
+        <button class="action-btn secondary" id="clearBtn">🗑️ Очистить</button>
+    </div>
+
+    <textarea id="outputText" placeholder="Результат..." style="height:120px;" readonly></textarea>
+
+    <div class="stats">
+        <div>📊 Вход: <span id="inLen">0</span> симв.</div>
+        <div>📊 Выход: <span id="outLen">0</span> симв.</div>
+        <div>🧩 Метод: <span id="currentMethod">—</span></div>
+        <div>📦 Всего: <span id="totalMethods">0</span></div>
+    </div>
+
+    <div class="status-msg" id="statusMsg">✅ Готов. Выберите метод и нажмите "Зашифровать".</div>
+</div>
+
+<script>
+// ---- БАЗА МЕТОДОВ (полная, из предыдущей версии) ----
+const METHODS = {
+    'Binary': { cat: 'Кодировки', desc: 'Двоичный код (0 и 1)', encode: t => t.split('').map(c => c.charCodeAt(0).toString(2).padStart(8, '0')).join(' '), decode: t => t.split(' ').map(b => String.fromCharCode(parseInt(b, 2))).join('') },
+    'Hexadecimal': { cat: 'Кодировки', desc: 'Шестнадцатеричный код', encode: t => t.split('').map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join(' '), decode: t => t.split(' ').map(h => String.fromCharCode(parseInt(h, 16))).join('') },
+    'Octal': { cat: 'Кодировки', desc: 'Восьмеричный код', encode: t => t.split('').map(c => c.charCodeAt(0).toString(8).padStart(3, '0')).join(' '), decode: t => t.split(' ').map(o => String.fromCharCode(parseInt(o, 8))).join('') },
+    'ASCII Decimal': { cat: 'Кодировки', desc: 'Десятичные ASCII-коды', encode: t => t.split('').map(c => c.charCodeAt(0)).join(' '), decode: t => t.split(' ').map(n => String.fromCharCode(parseInt(n))).join('') },
+    'Base64': { cat: 'Кодировки', desc: 'Стандартный Base64', encode: t => btoa(unescape(encodeURIComponent(t))), decode: t => { try { return decodeURIComponent(escape(atob(t))); } catch(e) { return '[Ошибка]'; } } },
+    'URL Encoding': { cat: 'Кодировки', desc: 'URL-кодирование', encode: t => encodeURIComponent(t), decode: t => { try { return decodeURIComponent(t); } catch(e) { return '[Ошибка]'; } } },
+    'ROT13': { cat: 'Шифры замены', desc: 'Сдвиг на 13 букв', encode: t => t.replace(/[a-zA-Z]/g, c => { const b = c.charCodeAt(0) >= 97 ? 97 : 65; return String.fromCharCode(((c.charCodeAt(0) - b + 13) % 26) + b); }), decode: 'same' },
+    'Atbash Cipher': { cat: 'Шифры замены', desc: 'Зеркальная замена (A↔Z)', encode: t => t.replace(/[a-zA-Z]/g, c => { const b = c.charCodeAt(0) >= 97 ? 97 : 65; return String.fromCharCode((25 - (c.charCodeAt(0) - b)) + b); }), decode: 'same' },
+    'Caesar Shift': { cat: 'Шифры замены', desc: 'Сдвиг по алфавиту (ключ)', encode: (t, k) => { const shift = parseInt(k) || 3; return t.replace(/[a-zA-Z]/g, c => { const b = c.charCodeAt(0) >= 97 ? 97 : 65; return String.fromCharCode(((c.charCodeAt(0) - b + shift) % 26) + b); }); }, decode: (t, k) => { const shift = parseInt(k) || 3; return t.replace(/[a-zA-Z]/g, c => { const b = c.charCodeAt(0) >= 97 ? 97 : 65; return String.fromCharCode(((c.charCodeAt(0) - b - shift + 26) % 26) + b); }); } },
+    'Morse Code': { cat: 'Специальные', desc: 'Азбука Морзе', encode: t => t.toUpperCase().split('').map(c => { const m = { 'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.','H':'....','I':'..','J':'.---','K':'-.-','L':'.-..','M':'--','N':'-.','O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-','U':'..-','V':'...-','W':'.--','X':'-..-','Y':'-.--','Z':'--..','0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.',' ':'/'}; return m[c] || c; }).join(' '), decode: t => { const m = { '.-':'A','-...':'B','-.-.':'C','-..':'D','.':'E','..-.':'F','--.':'G','....':'H','..':'I','.---':'J','-.-':'K','.-..':'L','--':'M','-.':'N','---':'O','.--.':'P','--.-':'Q','.-.':'R','...':'S','-':'T','..-':'U','...-':'V','.--':'W','-..-':'X','-.--':'Y','--..':'Z','-----':'0','.----':'1','..---':'2','...--':'3','....-':'4','.....':'5','-....':'6','--...':'7','---..':'8','----.':'9','/':' '}; return t.split(' ').map(s => m[s] || s).join(''); } },
+    'Braille': { cat: 'Специальные', desc: 'Шрифт Брайля (⠁⠃⠉)', encode: t => t.toLowerCase().split('').map(c => { const b = { 'a':'⠁','b':'⠃','c':'⠉','d':'⠙','e':'⠑','f':'⠋','g':'⠛','h':'⠓','i':'⠊','j':'⠚','k':'⠅','l':'⠇','m':'⠍','n':'⠝','o':'⠕','p':'⠏','q':'⠟','r':'⠗','s':'⠎','t':'⠞','u':'⠥','v':'⠧','w':'⠺','x':'⠭','y':'⠽','z':'⠵',' ':' '}; return b[c] || c; }).join(''), decode: t => { const b = { '⠁':'a','⠃':'b','⠉':'c','⠙':'d','⠑':'e','⠋':'f','⠛':'g','⠓':'h','⠊':'i','⠚':'j','⠅':'k','⠇':'l','⠍':'m','⠝':'n','⠕':'o','⠏':'p','⠟':'q','⠗':'r','⠎':'s','⠞':'t','⠥':'u','⠧':'v','⠺':'w','⠭':'x','⠽':'y','⠵':'z',' ':' '}; return t.split('').map(s => b[s] || s).join(''); } },
+    'Nato Phonetic': { cat: 'Специальные', desc: 'НАТО-алфавит (Alpha Bravo)', encode: t => t.toUpperCase().split('').map(c => { const n = { 'A':'Alpha','B':'Bravo','C':'Charlie','D':'Delta','E':'Echo','F':'Foxtrot','G':'Golf','H':'Hotel','I':'India','J':'Juliett','K':'Kilo','L':'Lima','M':'Mike','N':'November','O':'Oscar','P':'Papa','Q':'Quebec','R':'Romeo','S':'Sierra','T':'Tango','U':'Uniform','V':'Victor','W':'Whiskey','X':'Xray','Y':'Yankee','Z':'Zulu' }; return n[c] || c; }).join(' '), decode: t => { const n = { 'Alpha':'A','Bravo':'B','Charlie':'C','Delta':'D','Echo':'E','Foxtrot':'F','Golf':'G','Hotel':'H','India':'I','Juliett':'J','Kilo':'K','Lima':'L','Mike':'M','November':'N','Oscar':'O','Papa':'P','Quebec':'Q','Romeo':'R','Sierra':'S','Tango':'T','Uniform':'U','Victor':'V','Whiskey':'W','Xray':'X','Yankee':'Y','Zulu':'Z' }; return t.split(' ').map(s => n[s] || s).join(''); } },
+    'L33t Speak': { cat: 'Стили', desc: 'Замена букв на цифры (1337)', encode: t => t.replace(/a/gi,'4').replace(/e/gi,'3').replace(/i/gi,'1').replace(/o/gi,'0').replace(/s/gi,'5').replace(/t/gi,'7').replace(/b/gi,'8'), decode: t => t.replace(/4/g,'a').replace(/3/g,'e').replace(/1/g,'i').replace(/0/g,'o').replace(/5/g,'s').replace(/7/g,'t').replace(/8/g,'b') },
+    'SpongeBob Case': { cat: 'Стили', desc: 'ПЕРЕМЕШИВАНИЕ РЕГИСТРА', encode: t => t.split('').map((c,i) => i%2===0 ? c.toUpperCase() : c.toLowerCase()).join(''), decode: 'same' },
+    'Reverse': { cat: 'Стили', desc: 'Переворот строки', encode: t => t.split('').reverse().join(''), decode: 'same' },
+    'Pig Latin': { cat: 'Стили', desc: 'Свиная латынь (ay)', encode: t => t.split(' ').map(w => { if (w.length<2) return w+'ay'; const m = w.match(/^[^aeiouy]+/i); if (!m) return w+'way'; return w.slice(m[0].length)+m[0].toLowerCase()+'ay'; }).join(' '), decode: t => t.split(' ').map(w => { if (!w.endsWith('ay')) return w; let s = w.slice(0,-2); const m = s.match(/[aeiouy]/i); if (!m) return s; const idx = s.indexOf(m[0]); return s.slice(idx)+s.slice(0,idx); }).join(' ') },
+    'Text Stretch': { cat: 'Стили', desc: 'Р а с т я г и в а н и е', encode: t => t.split('').join(' '), decode: t => t.replace(/\s/g,'') },
+    'Upside Down': { cat: 'Стили', desc: 'Перевёрнутый текст', encode: t => t.split('').reverse().map(c => { const u = { 'a':'ɐ','b':'q','c':'ɔ','d':'p','e':'ǝ','f':'ɟ','g':'ƃ','h':'ɥ','i':'ı','j':'ɾ','k':'ʞ','l':'l','m':'ɯ','n':'u','o':'o','p':'d','q':'b','r':'ɹ','s':'s','t':'ʇ','u':'n','v':'ʌ','w':'ʍ','x':'x','y':'ʎ','z':'z','A':'∀','B':'𐐒','C':'Ɔ','D':'ᗡ','E':'Ǝ','F':'Ⅎ','G':'⅁','H':'H','I':'I','J':'ſ','K':'Ʞ','L':'˥','M':'W','N':'N','O':'O','P':'Ԁ','Q':'Q','R':'ᴚ','S':'S','T':'┴','U':'∩','V':'Λ','W':'W','X':'X','Y':'⅄','Z':'Z',' ':' '}; return u[c] || c; }).join(''), decode: 'same' },
+    'Small Caps': { cat: 'Стили', desc: 'ᴍᴀʟᴇɴʏᴋɪᴇ ᴋᴀɴɪᴛʏʀɴɪ', encode: t => t.toLowerCase().split('').map(c => { const s = { 'a':'ᴀ','b':'ʙ','c':'ᴄ','d':'ᴅ','e':'ᴇ','f':'ꜰ','g':'ɢ','h':'ʜ','i':'ɪ','j':'ᴊ','k':'ᴋ','l':'ʟ','m':'ᴍ','n':'ɴ','o':'ᴏ','p':'ᴘ','q':'ǫ','r':'ʀ','s':'s','t':'ᴛ','u':'ᴜ','v':'ᴠ','w':'ᴡ','x':'x','y':'ʏ','z':'ᴢ',' ':' '}; return s[c] || c; }).join(''), decode: t => t.split('').map(c => { const s = { 'ᴀ':'a','ʙ':'b','ᴄ':'c','ᴅ':'d','ᴇ':'e','ꜰ':'f','ɢ':'g','ʜ':'h','ɪ':'i','ᴊ':'j','ᴋ':'k','ʟ':'l','ᴍ':'m','ɴ':'n','ᴏ':'o','ᴘ':'p','ǫ':'q','ʀ':'r','s':'s','ᴛ':'t','ᴜ':'u','ᴠ':'v','ᴡ':'w','x':'x','ʏ':'y','ᴢ':'z',' ':' '}; return s[c] || c; }).join('') },
+    'Vaporwave': { cat: 'Стили', desc: 'ＶＡＰＯＲＷＡＶＥ', encode: t => t.split('').map(c => { const code = c.charCodeAt(0); if (code>=33 && code<=126) return String.fromCharCode(code+0xFEE0); return c; }).join(''), decode: t => t.split('').map(c => { const code = c.charCodeAt(0); if (code>=0xFF01 && code<=0xFF5E) return String.fromCharCode(code-0xFEE0); return c; }).join('') },
+    'Bubble Text': { cat: 'Стили', desc: 'ⓑⓤⓑⓑⓛⓔ', encode: t => t.split('').map(c => { const code = c.charCodeAt(0); if (code>=65&&code<=90) return String.fromCharCode(code+0x1D0); if (code>=97&&code<=122) return String.fromCharCode(code+0x1D0-32); return c; }).join(''), decode: t => t.split('').map(c => { const code = c.charCodeAt(0); if (code>=0x2460&&code<=0x2473) return String.fromCharCode(code-0x2460+65); if (code>=0x24B6&&code<=0x24CF) return String.fromCharCode(code-0x24B6+97); if (code>=0x24D0&&code<=0x24E9) return String.fromCharCode(code-0x24D0+97); return c; }).join('') },
+    'Zalgo (Glitch)': { cat: 'Стили', desc: 'G̷l̷i̷t̷c̷h̷', encode: t => t.split('').map(c => { const diacritics = ['\u0300','\u0301','\u0302','\u0303','\u0304','\u0305','\u0306','\u0307','\u0308','\u0309','\u030A','\u030B','\u030C','\u030D','\u030E','\u030F','\u0310','\u0311','\u0312','\u0313','\u0314','\u0315','\u0316','\u0317','\u0318','\u0319','\u031A','\u031B','\u031C','\u031D','\u031E','\u031F']; let d = ''; for (let i=0; i<3+Math.floor(Math.random()*4); i++) d += diacritics[Math.floor(Math.random()*diacritics.length)]; return c+d; }).join(''), decode: t => t.normalize('NFKD').replace(/[\u0300-\u036f]/g,'') }
+};
+
+const CATEGORIES = {
+    'Кодировки': ['Binary','Hexadecimal','Octal','ASCII Decimal','Base64','URL Encoding'],
+    'Шифры замены': ['ROT13','Atbash Cipher','Caesar Shift'],
+    'Специальные': ['Morse Code','Braille','Nato Phonetic'],
+    'Стили': ['L33t Speak','SpongeBob Case','Reverse','Pig Latin','Text Stretch','Upside Down','Small Caps','Vaporwave','Bubble Text','Zalgo (Glitch)']
+};
+
+// ---- DOM ----
+const methodContainer = document.getElementById('methodContainer');
+const searchInput = document.getElementById('searchInput');
+const inputEl = document.getElementById('inputText');
+const outputEl = document.getElementById('outputText');
+const encryptBtn = document.getElementById('encryptBtn');
+const decryptBtn = document.getElementById('decryptBtn');
+const copyBtn = document.getElementById('copyBtn');
+const swapBtn = document.getElementById('swapBtn');
+const clearBtn = document.getElementById('clearBtn');
+const statusMsg = document.getElementById('statusMsg');
+const inLen = document.getElementById('inLen');
+const outLen = document.getElementById('outLen');
+const currentMethodSpan = document.getElementById('currentMethod');
+const totalMethodsSpan = document.getElementById('totalMethods');
+const doubleEncode = document.getElementById('doubleEncode');
+const addSpaces = document.getElementById('addSpaces');
+const showInfo = document.getElementById('showInfo');
+const methodKey = document.getElementById('methodKey');
+const keySection = document.getElementById('keySection');
+const secretMessage = document.getElementById('secretMessage');
+const secretClose = document.getElementById('secretClose');
+const mainContainer = document.getElementById('mainContainer');
+const particlesContainer = document.getElementById('particles');
+
+let currentMethod = 'ROT13';
+let easterEggActive = false;
+
+// ---- ПАСХАЛКА ----
+function triggerEasterEgg() {
+    if (easterEggActive) return;
+    easterEggActive = true;
+
+    // Показываем секретное сообщение
+    secretMessage.classList.add('show');
+
+    // Эффекты на странице
+    document.body.classList.add('easter-egg');
+    mainContainer.classList.add('easter-egg');
+
+    // Создаём частицы
+    particlesContainer.classList.add('active');
+    for (let i = 0; i < 150; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const tx = (Math.random() - 0.5) * 600;
+        const ty = (Math.random() - 0.5) * 600;
+        p.style.left = x + '%';
+        p.style.top = y + '%';
+        p.style.setProperty('--tx', tx + 'px');
+        p.style.setProperty('--ty', ty + 'px');
+        p.style.animationDuration = (2 + Math.random() * 3) + 's';
+        p.style.background = ['#ff0000','#ff6600','#ff00ff','#ff4444','#ff8888'][Math.floor(Math.random()*5)];
+        p.style.width = (2 + Math.random() * 6) + 'px';
+        p.style.height = p.style.width;
+        particlesContainer.appendChild(p);
+        setTimeout(() => p.remove(), 5000);
+    }
+
+    // Статус
+    statusMsg.textContent = '🔥 СЕКРЕТНАЯ ПАСХАЛКА АКТИВИРОВАНА! MaksDV';
+    statusMsg.className = 'status-msg easter';
+
+    // Консоль
+    console.log('%c🔥 ПАСХАЛКА АКТИВИРОВАНА! MaksDV', 'color: #ff0000; font-size: 24px; font-weight: bold;');
+    console.log('%cТы не должен был это видеть! Это секрет!', 'color: #ff6600; font-size: 18px;');
+
+    // Визуальный фидбек на полях
+    inputEl.style.borderColor = '#ff0000';
+    outputEl.style.borderColor = '#ff0000';
+    inputEl.style.boxShadow = '0 0 30px rgba(255,0,0,0.3)';
+    outputEl.style.boxShadow = '0 0 30px rgba(255,0,0,0.3)';
+}
+
+function closeEasterEgg() {
+    easterEggActive = false;
+    secretMessage.classList.remove('show');
+    document.body.classList.remove('easter-egg');
+    mainContainer.classList.remove('easter-egg');
+    particlesContainer.classList.remove('active');
+    particlesContainer.innerHTML = '';
+    statusMsg.textContent = '✅ Пасхалка скрыта. Продолжайте работу.';
+    statusMsg.className = 'status-msg success';
+    inputEl.style.borderColor = '';
+    outputEl.style.borderColor = '';
+    inputEl.style.boxShadow = '';
+    outputEl.style.boxShadow = '';
+}
+
+secretClose.addEventListener('click', closeEasterEgg);
+
+// ---- Мониторинг ввода для пасхалки ----
+function checkForEasterEgg(text) {
+    if (easterEggActive) return;
+    // Ищем "MaksDV" (регистронезависимо)
+    if (text && text.toLowerCase().includes('maksdv')) {
+        triggerEasterEgg();
+    }
+}
+
+// Отслеживаем ввод в обоих полях
+inputEl.addEventListener('input', function() {
+    checkForEasterEgg(this.value);
+});
+outputEl.addEventListener('input', function() {
+    checkForEasterEgg(this.value);
+});
+
+// Также проверяем при вставке через контекстное меню
+inputEl.addEventListener('paste', function() {
+    setTimeout(() => checkForEasterEgg(this.value), 100);
+});
+outputEl.addEventListener('paste', function() {
+    setTimeout(() => checkForEasterEgg(this.value), 100);
+});
+
+// ---- ОСТАЛЬНОЙ КОД (рендер, обработчики, как в v5.0) ----
+function renderMethods(filter = '') {
+    methodContainer.innerHTML = '';
+    let count = 0;
+
+    for (const [cat, methods] of Object.entries(CATEGORIES)) {
+        const filteredMethods = methods.filter(m => {
+            const nameMatch = m.toLowerCase().includes(filter.toLowerCase());
+            const descMatch = METHODS[m]?.desc?.toLowerCase().includes(filter.toLowerCase()) || false;
+            return nameMatch || descMatch;
+        });
+
+        if (filteredMethods.length === 0) continue;
+
+        const section = document.createElement('div');
+        section.className = 'category-section';
+
+        const title = document.createElement('div');
+        title.className = 'category-title';
+        title.textContent = cat + ' (' + filteredMethods.length + ')';
+        section.appendChild(title);
+
+        const selector = document.createElement('div');
+        selector.className = 'method-selector';
+
+        for (const m of filteredMethods) {
+            const btn = document.createElement('button');
+            btn.className = 'method-btn' + (m === currentMethod ? ' active' : '');
+            btn.dataset.method = m;
+            const info = METHODS[m];
+            let label = m;
+            if (showInfo.checked && info?.desc) {
+                label += ' ' + info.desc.substring(0, 20) + (info.desc.length > 20 ? '…' : '');
+            }
+            btn.textContent = label;
+            btn.title = info?.desc || '';
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMethod = m;
+                currentMethodSpan.textContent = m;
+                statusMsg.textContent = '✅ Метод: ' + m;
+                statusMsg.className = 'status-msg success';
+                const needsKey = ['Caesar Shift', 'XOR'].includes(m);
+                keySection.style.display = needsKey ? 'flex' : 'none';
+                if (m === 'Caesar Shift') methodKey.placeholder = 'Сдвиг (число)';
+                else if (m === 'XOR') methodKey.placeholder = 'Ключ (строка)';
+            });
+            selector.appendChild(btn);
+            count++;
+        }
+
+        section.appendChild(selector);
+        methodContainer.appendChild(section);
+    }
+
+    totalMethodsSpan.textContent = count;
+}
+
+function updateStats() {
+    inLen.textContent = inputEl.value.length;
+    outLen.textContent = outputEl.value.length;
+}
+
+function getKey() {
+    const val = methodKey.value.trim();
+    if (currentMethod === 'Caesar Shift') {
+        const num = parseInt(val);
+        return isNaN(num) ? 3 : num;
+    }
+    return val || 'bypass2026';
+}
+
+function processText(method, text, isEncrypt) {
+    if (!text) return '';
+    const info = METHODS[method];
+    if (!info) return '[Неизвестный метод]';
+
+    try {
+        let result;
+        const key = getKey();
+
+        if (isEncrypt) {
+            if (typeof info.encode === 'function') {
+                result = info.encode(text, key);
+            } else if (info.encode === 'same') {
+                result = (typeof info.decode === 'function') ? info.decode(text, key) : text;
+            } else {
+                result = text;
+            }
+        } else {
+            if (typeof info.decode === 'function' && info.decode !== 'same') {
+                result = info.decode(text, key);
+            } else if (info.decode === 'same' || typeof info.encode === 'function') {
+                result = (typeof info.encode === 'function') ? info.encode(text, key) : text;
+            } else {
+                result = text;
+            }
+        }
+
+        if (isEncrypt && !['Base64','URL Encoding'].includes(method)) {
+            if (doubleEncode.checked) {
+                result = btoa(unescape(encodeURIComponent(result)));
+            }
+            if (addSpaces.checked && result.length > 4) {
+                result = result.match(/.{1,4}/g).join(' ');
+            }
+        }
+
+        return result;
+
+    } catch(e) {
+        return '[Ошибка: ' + e.message + ']';
+    }
+}
+
+function handleEncrypt() {
+    const text = inputEl.value;
+    if (!text) { statusMsg.textContent = '⚠️ Введите текст!'; statusMsg.className = 'status-msg warning'; return; }
+    const result = processText(currentMethod, text, true);
+    outputEl.value = result;
+    updateStats();
+    statusMsg.textContent = '✅ Зашифровано: ' + currentMethod;
+    statusMsg.className = 'status-msg success';
+}
+
+function handleDecrypt() {
+    const text = outputEl.value || inputEl.value;
+    if (!text) { statusMsg.textContent = '⚠️ Введите текст для расшифровки!'; statusMsg.className = 'status-msg warning'; return; }
+    const result = processText(currentMethod, text, false);
+    inputEl.value = result;
+    outputEl.value = '';
+    updateStats();
+    statusMsg.textContent = '✅ Расшифровано: ' + currentMethod;
+    statusMsg.className = 'status-msg success';
+}
+
+function handleCopy() {
+    const text = outputEl.value || inputEl.value;
+    if (!text) { statusMsg.textContent = '⚠️ Нет текста!'; statusMsg.className = 'status-msg warning'; return; }
+    navigator.clipboard.writeText(text).then(() => {
+        statusMsg.textContent = '📋 Скопировано!';
+        statusMsg.className = 'status-msg success';
+    }).catch(() => {
+        outputEl.select();
+        document.execCommand('copy');
+        statusMsg.textContent = '📋 Скопировано!';
+        statusMsg.className = 'status-msg success';
+    });
+}
+
+function handleSwap() {
+    const temp = inputEl.value;
+    inputEl.value = outputEl.value;
+    outputEl.value = temp;
+    updateStats();
+    statusMsg.textContent = '🔄 Поля обменяны';
+    statusMsg.className = 'status-msg';
+}
+
+function handleClear() {
+    inputEl.value = '';
+    outputEl.value = '';
+    updateStats();
+    statusMsg.textContent = '🗑️ Очищено';
+    statusMsg.className = 'status-msg';
+}
+
+searchInput.addEventListener('input', () => {
+    renderMethods(searchInput.value);
+    document.querySelectorAll('.method-btn').forEach(b => {
+        if (b.dataset.method === currentMethod) b.classList.add('active');
+    });
+});
+
+showInfo.addEventListener('change', () => {
+    renderMethods(searchInput.value);
+    document.querySelectorAll('.method-btn').forEach(b => {
+        if (b.dataset.method === currentMethod) b.classList.add('active');
+    });
+});
+
+renderMethods('');
+currentMethodSpan.textContent = 'ROT13';
+updateStats();
+statusMsg.textContent = '✅ Готов. Выберите метод. Пасхалка: введите "MaksDV" в любое поле!';
+statusMsg.className = 'status-msg success';
+
+encryptBtn.addEventListener('click', handleEncrypt);
+decryptBtn.addEventListener('click', handleDecrypt);
+copyBtn.addEventListener('click', handleCopy);
+swapBtn.addEventListener('click', handleSwap);
+clearBtn.addEventListener('click', handleClear);
+
+inputEl.addEventListener('keydown', e => { if (e.ctrlKey && e.key === 'Enter') { e.preventDefault(); handleEncrypt(); } });
+outputEl.addEventListener('keydown', e => { if (e.ctrlKey && e.key === 'Enter') { e.preventDefault(); handleDecrypt(); } });
+
+console.log('%c🧠 AI BYPASSER v5.1 — Секретная пасхалка активирована', 'color: #00ffc8; font-size: 16px;');
+console.log('🔑 Введите "MaksDV" в любое поле, чтобы увидеть секрет!');
+</script>
+</body>
+  </html>
